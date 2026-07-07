@@ -14,7 +14,7 @@ RUN composer install --no-dev --optimize-autoloader \
     && chmod -R 777 storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx.conf /etc/nginx/sites-enabled/default.conf
 
 ENV WEBROOT /var/www/html/public
 ENV APP_ENV production
