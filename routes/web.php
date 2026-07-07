@@ -14,15 +14,17 @@ use App\Http\Controllers\ProfileController;
 |--------------------------------------------------------------------------
 */
 
+// Rutas Públicas (Sin conflictos)
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
-
-Route::get('/nuestros-proyectos', [ProyectoController::class, 'publicIndex'])
-    ->name('proyectos.publico');
-
+Route::get('/nuestros-proyectos', [ProyectoController::class, 'publicIndex'])->name('proyectos.publico');
 Route::view('/contacto', 'components.contacto')->name('contacto');
-
 Route::view('/emergencias', 'components.emergencias')->name('emergencias');
 
+// Rutas Admin (Protegidas)
+Route::middleware(['auth', 'verified', 'is_admin'])->group(function () {
+    Route::resource('admin/proyectos', ProyectoController::class)->except('show');
+    // ... resto de rutas admin
+});
 /*
 |--------------------------------------------------------------------------
 | FORMULARIOS PÚBLICOS
