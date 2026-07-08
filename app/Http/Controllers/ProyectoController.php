@@ -182,6 +182,6 @@ class ProyectoController extends Controller
      */
     public function publicIndex(Request $request)
 {
-    dd('ENTRO AL CONTROLADOR');
+    dd('RENDER ESTA LEYENDO LA RUTA');
 }
 }
