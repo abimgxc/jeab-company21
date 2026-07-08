@@ -10,19 +10,15 @@ RUN composer install --no-dev --optimize-autoloader && \
     chmod -R 777 storage bootstrap/cache && \
     chown -R www-data:www-data storage bootstrap/cache
 
-# Generamos el script de arranque internamente
-RUN echo '#!/bin/sh' > /startup.sh && \
-    echo 'php artisan migrate --force' >> /startup.sh && \
-    echo 'php artisan route:clear' >> /startup.sh && \
-    echo 'exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf' >> /startup.sh && \
-    chmod +x /startup.sh
-
-# Configuramos el entorno
 ENV WEBROOT /var/www/html/public
 ENV APP_ENV production
 ENV APP_DEBUG false
 
-# Definimos el punto de entrada
-ENTRYPOINT ["/startup.sh"]
+# --- EL CAMBIO CRUCIAL ---
+# Ejecutamos las migraciones primero, y luego el comando original de la imagen
+# El comando original de esta imagen base es: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+CMD php artisan migrate --force && \
+    php artisan route:clear && \
+    /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
 EXPOSE 80
