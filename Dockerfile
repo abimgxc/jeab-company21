@@ -19,3 +19,5 @@ ENV PHP_PM_MAX_CHILDREN=10
 # y lo moveremos al panel de Render para que no bloquee el inicio.
 
 EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
