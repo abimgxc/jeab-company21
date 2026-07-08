@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('testimonios', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_cliente'); // [cite: 35]
-            $table->string('empresa')->nullable(); // Opcional [cite: 36]
-            $table->string('tipo_proyecto'); // [cite: 37]
-            $table->text('comentario'); // [cite: 38]
-            $table->unsignedTinyInteger('calificacion'); // Del 1 al 5 [cite: 39]
-            $table->boolean('aprobado')->default(false); // Para moderar si se muestra o no
+            $table->string('nombre_cliente');
+            $table->string('empresa')->nullable();
+            $table->string('tipo_proyecto');
+            $table->text('comentario');
+            $table->unsignedTinyInteger('calificacion');
+            $table->boolean('activo')->default(false); // Controla si se muestra o no
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           @php
-    $testimoniosActivos = \App\Models\Testimonio::where('aprobado', true)
+    $testimoniosActivos = \App\Models\Testimonio::where('activo', true)
         ->latest()
         ->take(3)
         ->get();

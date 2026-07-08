@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Testimonio extends Model
 {
     protected $fillable = [
-        'nombre_cliente', 
-        'empresa', 
-        'tipo_proyecto', 
-        'comentario', 
-        'calificacion', 
-        'aprobado',
+        'nombre_cliente',
+        'empresa',
+        'tipo_proyecto',
+        'comentario',
+        'calificacion',
+        'activo',
     ];
 }
