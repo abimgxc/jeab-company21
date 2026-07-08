@@ -5,6 +5,7 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 RUN composer install --no-dev --optimize-autoloader && \
+    php artisan optimize:clear && \
     chmod -R 777 storage bootstrap/cache && \
     chown -R www-data:www-data storage bootstrap/cache
 
