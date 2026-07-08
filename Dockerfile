@@ -13,7 +13,7 @@ RUN composer install --no-dev --optimize-autoloader && \
 # 2. USAMOS LA VARIABLE OFICIAL DE LA IMAGEN
 # Esta imagen ejecuta automáticamente cualquier script que le indiques aquí
 # antes de iniciar sus servicios internos.
-ENV PRE_START_COMMAND="php artisan migrate --force && php artisan route:clear"
+ENV PRE_START_COMMAND="php artisan route:clear && php artisan config:clear && php artisan cache:clear && php artisan migrate --force"
 
 ENV WEBROOT /var/www/html/public
 ENV APP_ENV production
