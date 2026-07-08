@@ -2,7 +2,6 @@ FROM richarvey/nginx-php-fpm:3.1.6
 
 COPY . /var/www/html
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
-
 WORKDIR /var/www/html
 
 # Instalación optimizada
