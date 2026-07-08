@@ -14,87 +14,46 @@ use App\Http\Controllers\ProfileController;
 |--------------------------------------------------------------------------
 */
 
-// Rutas Públicas (Sin conflictos)
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
 Route::get('/nuestros-proyectos', [ProyectoController::class, 'publicIndex'])->name('proyectos.publico');
-Route::view('/contacto', 'components.contacto')->name('contacto');
-Route::view('/emergencias', 'components.emergencias')->name('emergencias');
+// Nota: Asegúrate de que el archivo exista en resources/views/contacto.blade.php
+Route::view('/contacto', 'contacto')->name('contacto');
+Route::view('/emergencias', 'emergencias')->name('emergencias');
 
-// Rutas Admin (Protegidas)
-Route::middleware(['auth', 'verified', 'is_admin'])->group(function () {
-    Route::resource('admin/proyectos', ProyectoController::class)->except('show');
-    // ... resto de rutas admin
-});
+// Formularios Públicos
+Route::post('/cotizacion', [CotizacionController::class, 'store'])->name('cotizacion.store');
+Route::post('/testimonios/publico', [TestimoniosController::class, 'store'])->name('testimonios.store.publico');
+Route::post('/visitas', [VisitaTecnicaController::class, 'store'])->name('visitas.store');
+
 /*
 |--------------------------------------------------------------------------
-| FORMULARIOS PÚBLICOS
+| ADMINISTRACIÓN (Protegido y con prefijo /admin)
 |--------------------------------------------------------------------------
 */
 
-// Cotización
-Route::post('/cotizacion', [CotizacionController::class, 'store'])
-    ->name('cotizacion.store');
+Route::middleware(['auth', 'verified', 'is_admin'])->prefix('admin')->group(function () {
+    
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
 
-// Testimonio enviado por clientes
-Route::post('/testimonios/publico', [TestimoniosController::class, 'store'])
-    ->name('testimonios.store.publico');
+    // CRUDs de Administración
+    Route::resource('proyectos', ProyectoController::class)->except('show');
+    Route::resource('testimonios', TestimoniosController::class)->except('show');
+    Route::resource('cotizaciones', CotizacionController::class)->only(['index', 'destroy']);
 
-// Visita técnica
-Route::post('/visitas', [VisitaTecnicaController::class, 'store'])
-    ->name('visitas.store');
-
+    // Acciones específicas
+    Route::patch('/testimonios/{id}/aprobar', [TestimoniosController::class, 'aprobar'])->name('testimonios.aprobar');
+});
 
 /*
 |--------------------------------------------------------------------------
-| USUARIOS AUTENTICADOS
+| PERFIL DE USUARIO
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth', 'verified'])->group(function () {
-
-    Route::view('/dashboard', 'dashboard')
-        ->name('dashboard');
-
-    Route::get('/profile', [ProfileController::class, 'edit'])
-        ->name('profile.edit');
-
-    Route::patch('/profile', [ProfileController::class, 'update'])
-        ->name('profile.update');
-
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
-/*
-|--------------------------------------------------------------------------
-| ADMINISTRADOR
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware(['auth', 'verified', 'is_admin'])->group(function () {
-
-    // CRUD Proyectos
-    Route::resource('proyectos', ProyectoController::class)
-        ->except('show');
-
-    // CRUD Testimonios
-    Route::patch('/testimonios/{id}/aprobar', [TestimoniosController::class, 'aprobar'])
-        ->name('testimonios.aprobar');
-
-    Route::resource('testimonios', TestimoniosController::class)
-        ->except('show');
-
-    // Cotizaciones
-    Route::resource('cotizaciones', CotizacionController::class)
-        ->only(['index', 'destroy']);
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| AUTH
-|--------------------------------------------------------------------------
-*/
 
 require __DIR__.'/auth.php';
