@@ -65,8 +65,7 @@
                  class="group flex flex-col rounded-3xl overflow-hidden border border-gray-800 bg-[#0b0f19] hover:border-yellow-400 transition-all duration-300 cursor-pointer h-full">
 
                 <div class="relative w-full h-64 bg-black overflow-hidden flex items-center justify-center shrink-0">
-                    @if(Str::endsWith($proyecto->imagen, ['.mp4', '.mov', '.webm']))
-                        <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                @if(\Illuminate\Support\Str::endsWith($proyecto->imagen, ['.mp4', '.mov', '.webm']))                        <video autoplay muted loop playsinline class="w-full h-full object-cover">
                             <source src="{{ asset('storage/'.$proyecto->imagen) }}">
                         </video>
                         <div class="absolute top-3 right-3 bg-black/70 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
