@@ -180,8 +180,19 @@ class ProyectoController extends Controller
     /**
      * Vista pública del portafolio (Módulo 2 Frontend).
      */
-    public function publicIndex(Request $request)
-{
-    dd('RENDER ESTA LEYENDO LA RUTA');
-}
+public function publicIndex(Request $request)
+    {
+        $query = Proyecto::with('imagenes')->latest();
+
+        // Aplicamos los filtros de búsqueda según el texto enviado
+        if ($request->filled('buscar')) {
+            $query->where('nombre', 'like', '%' . $request->buscar . '%')
+                  ->orWhere('descripcion', 'like', '%' . $request->buscar . '%')
+                  ->orWhere('ubicacion', 'like', '%' . $request->buscar . '%');
+        }
+
+        $proyectos = $query->get();
+
+        return view('proyectos.publico', compact('proyectos'));
+    }
 }
